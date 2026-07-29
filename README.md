@@ -41,7 +41,7 @@ TAVILY_API_KEY=你的_Tavily_API_Key
 
 方舟必须使用 [Agent Plan 专属 API Key](https://console.volcengine.com/ark/region:ark+cn-beijing/openManagement?LLM=%7B%7D&OpenModelVisible=false&advancedActiveKey=agentPlan)，Coding Plan API Key 和普通方舟推理 API Key 均不能复用。Coffee 通过 Agent Plan Chat API `https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions` 调用模型。
 
-`/model` 中内置了 Agent Plan 官方 Chat API 示例列出的文本模型：`ark-code-latest`、Doubao Seed 2.1 Turbo、Doubao Seed Evolving、GLM-5.2、GLM Latest、DeepSeek V4 Flash/Pro、Doubao Seed 2.0 Lite/Mini、MiniMax M2.7/M3、Kimi K2.6、Kimi K2.7 Code 和 Kimi K3。具体可用范围由你的 Agent Plan 版本及服务端当前授权决定。
+`/model` 中内置了 Agent Plan 官方 Chat API 示例列出的文本模型：`ark-code-latest`、Doubao Seed 2.1 Turbo、Doubao Seed Evolving、GLM-5.2、GLM Latest、DeepSeek V4 Flash/Pro、Doubao Seed 2.0 Lite/Mini、MiniMax M2.7/M3、Kimi K2.6、Kimi K2.7 Code 和 Kimi K3。具体可用范围由你的 Agent Plan 版本及服务端当前授权决定。DeepSeek、OpenCode Go 和 OpenCode Zen 平台也有各自的模型清单，以 `/model` 中实际列出为准。
 
 启动 CLI：
 
@@ -71,11 +71,11 @@ Coffee 会保留启动目录：如果当前目录位于 Git 仓库中，使用�
 npm unlink --global coffee-agent
 ```
 
-在足够宽的真实终端中，Coffee 会显示空心斜体 `COFFEE` Logo，以及水平排列的冰美式和热拿铁。窄终端或管道输出会自动使用紧凑启动文案；设置 `NO_COLOR=1` 只关闭颜色，不移除字符画。
+启动时 Coffee 会显示终端主题配色的启动横幅：第一行是 `Coffee`，第二行是当前模型名与工作区目录，第三行提示输入 `/` 查看命令或按 Ctrl+C 退出。非 TTY 或管道输出会自动使用紧凑启动文案。
 
 在终端中输入消息开始对话，输入 `/exit` 或按 Ctrl+C 退出。Coffee 默认流式显示模型回答：完整行会立即提交，只有当前未完成行可作为预览覆盖；TTY 支持 ANSI 时会在同一行刷新预览。设置 `NO_COLOR=1` 可关闭颜色。
 
-非 TTY、`TERM=dumb`、终端宽度无效或写入异常时，输出会安全降级为只追加，内容不丢失也不重复。模型的原始推理内容不会显示，CLI 只提供“正在分析问题”等简短状态。工具调用会结束当前回答段，再配合已有的冰美式或热拿铁动画执行，后续结果会进入新的稳定段。
+非 TTY、`TERM=dumb`、终端宽度无效或写入异常时，输出会安全降级为只追加，内容不丢失也不重复。模型的原始推理内容不会显示，CLI 只提供“正在分析问题”等简短状态。工具调用会结束当前回答段，并在当前主题色下显示状态行（如“正在翻找网页…”），后续结果会进入新的稳定段。
 
 如果模型在输出任何正文、推理或工具增量之前明确表示不支持流式请求，Coffee 会安全地自动回退为完整响应；已经收到增量后发生错误时不会重试，以免重复回答或工具调用。按 Ctrl+C 中断时，Coffee 会保留已显示内容并正常收尾，但未完成的一轮不会写入当前会话历史。同一个 Conversation 同时只处理一个请求，并发请求会立即报错。
 
@@ -84,16 +84,14 @@ npm unlink --global coffee-agent
 - `/login`：添加、保留或更新模型平台凭证。
 - `/logout`：删除保存在全局凭证文件中的平台凭证。
 - `/model`：从已登录的平台中选择模型。
+- `/theme`：交互选择终端主题。
 - `/new`：进入一个尚未保存的新会话；成功创建计划时会立即保存该计划所属的零回合会话。
 - `/sessions`：列出并切换已保存的会话。
 - `/delete`：确认后删除当前会话及其历史。
 - `/plan [cancel]`：查看或取消当前任务计划。
-- `/like`：交互选择工具动画。
-- `/like americano`：切换为冰美式动画。
-- `/like latte`：切换为热拿铁动画。
 - `/exit`：退出 Coffee。
 
-不存在的斜杠命令不会发送给模型。对于 `/likes`、`/lik` 等相近拼写，Coffee 会先询问是否改用 `/like`；其他未知命令会直接显示可用命令。
+不存在的斜杠命令不会发送给模型。对于 `/themes`、`/them` 等相近拼写，Coffee 会先询问是否改用 `/theme`；其他未知命令会直接显示可用命令。
 
 ## 结构化任务规划
 
@@ -151,14 +149,14 @@ Coffee 会让当前模型根据问题自行决定是否调用以下工具：
 - `get_current_location`：使用 IPWho 根据公网 IP 获取近似城市、地区、国家、经纬度和时区。
 - `calculator`：计算包含数字、括号和 `+ - * / %` 的基础算术表达式。
 
-调用工具时，CLI 会根据当前偏好显示多行冰美式或热拿铁动画，并在完成后留下简短的耗时状态。IP 定位不是 GPS 定位，使用 VPN 或代理时可能不准确；定位请求会发送到第三方 IPWho 服务。
+调用工具时，CLI 会在当前主题色下显示简短的状态行（如“正在翻找网页…”），并在完成后留下耗时状态。IP 定位不是 GPS 定位，使用 VPN 或代理时可能不准确；定位请求会发送到第三方 IPWho 服务。
 
-动画偏好和模型偏好都保存在项目根目录的 `coffee.settings.json` 中：
+主题偏好和模型偏好都保存在项目根目录的 `coffee.settings.json` 中。当前提供三种主题：`latte`（奶油拿铁，默认）、`coast`（周末海岸）、`camp`（暮色露营）。
 
 ```json
 {
   "coffee-preferences": {
-    "animation": "americano"
+    "theme": "latte"
   },
   "model-preferences": {
     "provider": "opencode-go",

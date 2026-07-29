@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coffee · 请求等待状态</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0e1210;
+      color: #d9e5de;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    main { width: min(1040px, calc(100vw - 40px)); margin: 36px auto 64px; }
+    h1 { margin: 0 0 8px; color: #8be0b4; font-size: 27px; }
+    .lead { margin: 0 0 28px; color: #899a91; }
+    .terminal {
+      margin-bottom: 26px;
+      padding: 22px;
+      border: 1px solid #25352d;
+      border-radius: 14px;
+      background: #141916;
+      box-shadow: 0 20px 55px rgb(0 0 0 / 32%);
+      white-space: pre;
+      line-height: 1.55;
+      overflow: hidden;
+    }
+    .border { color: #5ecf99; }
+    .note { color: #74867c; }
+    .options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .option {
+      min-height: 230px;
+      padding: 18px;
+      border: 1px solid #2a3831;
+      border-radius: 14px;
+      background: #151b18;
+      cursor: pointer;
+      transition: .16s ease;
+    }
+    .option:hover, .option.selected {
+      transform: translateY(-2px);
+      border-color: #5ecf99;
+      box-shadow: 0 12px 34px rgb(41 177 112 / 14%);
+    }
+    .label { color: #77d9a8; font-weight: 800; }
+    h2 { margin: 8px 0 6px; font-size: 17px; }
+    p { color: #8d9f95; font: 14px/1.55 system-ui, sans-serif; }
+    .preview {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 9px;
+      background: #0d110f;
+      color: #cfe0d6;
+      white-space: pre-line;
+      line-height: 1.7;
+    }
+    .spinner {
+      display: inline-block;
+      color: #6fe0a8;
+      animation: spin .8s steps(8) infinite;
+    }
+    .coffee { color: #e9c46a; }
+    .step { color: #9a88eb; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 820px) { .options { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Coffee · Enter 后的等待状态</h1>
+    <p class="lead">输入区始终保持一行高度；提交后清除输入框，立即显示当前动作。</p>
+
+    <div class="terminal"><span class="border">────────────────────────────────────────────────</span>
+帮我检查当前项目的类型错误
+<span class="border">────────────────────────────────────────────────</span>
+<span class="note">提交后，输入区不会从两行高度跳回一行。</span></div>
+
+    <div class="options">
+      <div class="option" data-choice="a" onclick="toggleSelect(this)">
+        <div class="label">A · 单行旋转状态（推荐）</div>
+        <h2>最接近 Codex / Pi</h2>
+        <p>只占一行，状态变化时原地替换；模型正文出现后立即清除。</p>
+        <div class="preview"><span class="spinner">◜</span> 正在连接 DeepSeek…
+
+<span class="spinner">◜</span> 正在分析问题…
+
+<span class="spinner">◜</span> 正在整理工具结果…</div>
+      </div>
+
+      <div class="option" data-choice="b" onclick="toggleSelect(this)">
+        <div class="label">B · 咖啡豆旋转</div>
+        <h2>更有 Coffee 个性</h2>
+        <p>同样保持单行，但用咖啡色符号作为旋转主体，风格更活泼。</p>
+        <div class="preview"><span class="spinner coffee">◒</span> 正在连接模型…
+
+<span class="spinner coffee">◒</span> 正在思考你的问题…
+
+<span class="spinner coffee">◒</span> 正在准备工具…</div>
+      </div>
+
+      <div class="option" data-choice="c" onclick="toggleSelect(this)">
+        <div class="label">C · 步骤轨迹</div>
+        <h2>信息最完整</h2>
+        <p>保留已完成步骤并追加当前步骤；更清楚，但会占用更多终端空间。</p>
+        <div class="preview"><span class="step">✓</span> 已准备上下文
+<span class="step">✓</span> 已连接 DeepSeek
+<span class="spinner">◜</span> 正在分析问题…</div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

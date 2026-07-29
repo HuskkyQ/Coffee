@@ -1,0 +1,9 @@
+{
+  "coffee-preferences": {
+    "animation": "americano"
+  },
+  "model-preferences": {
+    "provider": "volcengine-ark",
+    "model": "ark-code-latest"
+  }
+}

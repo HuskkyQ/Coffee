@@ -1,0 +1,55 @@
+<h2>选择 Coffee 的终端交互样式</h2>
+<p class="subtitle">三种方案都支持 ↑/↓ 移动、Enter 确认、Esc 取消；区别主要是高亮强度和输入区边界。</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111827;padding:18px;color:#d1d5db;font:14px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;">
+      <div style="color:#6b7280">────────────────────────────────────────</div>
+      <div style="color:#f9fafb;margin:8px 0 4px">选择方舟 Agent Plan 模型</div>
+      <div style="padding-left:8px">  Ark Code Latest</div>
+      <div style="background:#164e63;color:#ecfeff;padding:1px 8px">→ Doubao Seed 2.1 Turbo</div>
+      <div style="padding-left:8px">  GLM-5.2</div>
+      <div style="padding-left:8px">  Kimi K3</div>
+      <div style="color:#6b7280;margin-top:8px">↑↓ 移动 · Enter 确认 · Esc 取消</div>
+      <div style="color:#22d3ee;margin-top:14px">────────────────────────────────────────</div>
+      <div style="color:#f9fafb;padding:5px 2px">帮我检查当前项目的类型错误<span style="background:#e5e7eb;color:#111827"> </span></div>
+      <div style="color:#22d3ee">────────────────────────────────────────</div>
+    </div>
+    <div class="card-body">
+      <h3>A · Pi 对齐（推荐）</h3>
+      <p>细边界输入区；选中项使用箭头和整行底色，状态最明确。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111827;padding:18px;color:#d1d5db;font:14px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;">
+      <div style="color:#f9fafb;margin-bottom:4px">选择方舟 Agent Plan 模型</div>
+      <div style="padding-left:8px">  Ark Code Latest</div>
+      <div style="color:#22d3ee;font-weight:700;padding-left:8px">› Doubao Seed 2.1 Turbo</div>
+      <div style="padding-left:8px">  GLM-5.2</div>
+      <div style="padding-left:8px">  Kimi K3</div>
+      <div style="color:#6b7280;margin-top:8px">↑↓ 移动 · Enter 确认 · Esc 取消</div>
+      <div style="margin-top:23px;color:#f9fafb">帮我检查当前项目的类型错误<span style="background:#e5e7eb;color:#111827"> </span></div>
+    </div>
+    <div class="card-body">
+      <h3>B · 极简无边框</h3>
+      <p>只用高亮文字和标记；画面最轻，但长列表中的当前项不如 A 醒目。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111827;padding:18px;color:#d1d5db;font:14px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;">
+      <div style="color:#f9fafb;margin-bottom:4px">选择方舟 Agent Plan 模型</div>
+      <div style="padding-left:8px">  Ark Code Latest</div>
+      <div style="background:#0891b2;color:#08111b;font-weight:700;padding:1px 8px">✓ Doubao Seed 2.1 Turbo</div>
+      <div style="padding-left:8px">  GLM-5.2</div>
+      <div style="padding-left:8px">  Kimi K3</div>
+      <div style="color:#6b7280;margin-top:8px">↑↓ 移动 · Enter 确认 · Esc 取消</div>
+      <div style="border:1px solid #0891b2;border-radius:6px;margin-top:14px;padding:7px;color:#f9fafb">帮我检查当前项目的类型错误<span style="background:#e5e7eb;color:#111827"> </span></div>
+    </div>
+    <div class="card-body">
+      <h3>C · 强高亮卡片</h3>
+      <p>选中态最强，输入区有完整边框；清楚但比 Pi 更重。</p>
+    </div>
+  </div>
+</div>

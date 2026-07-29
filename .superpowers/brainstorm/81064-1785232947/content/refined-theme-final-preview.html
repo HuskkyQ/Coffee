@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coffee · 最终终端样式</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c100e;
+      --panel: #121814;
+      --line: #26362e;
+      --primary: #68d9a3;
+      --success: #65d68f;
+      --error: #ff7474;
+      --muted: #809188;
+      --text: #dce7e0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% 0%, rgb(65 153 109 / 10%), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    main { width: min(920px, calc(100vw - 40px)); margin: 40px auto 64px; }
+    h1 { margin: 0 0 8px; color: var(--primary); font-size: 26px; }
+    .lead {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-family: system-ui, sans-serif;
+    }
+    .terminal {
+      min-height: 455px;
+      padding: 28px 30px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      box-shadow: 0 28px 70px rgb(0 0 0 / 36%);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .brand { color: var(--primary); font-size: 19px; font-weight: 800; }
+    .muted { color: var(--muted); }
+    .input { margin-top: 24px; }
+    .rule {
+      display: block;
+      overflow: hidden;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+    .input-line {
+      display: block;
+      height: 25px;
+      color: var(--text);
+      white-space: pre;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      min-height: 30px;
+      margin-top: 18px;
+      color: var(--muted);
+    }
+    .bean {
+      display: inline-block;
+      margin-right: 9px;
+      color: var(--primary);
+      font-size: 17px;
+      animation: spin .82s steps(4) infinite;
+    }
+    .success { color: var(--success); }
+    .error { color: var(--error); }
+    .timeline {
+      display: grid;
+      gap: 11px;
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .timeline strong { color: var(--text); font-weight: 500; }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .option {
+      padding: 15px 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #111713;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+    .option:hover, .option.selected {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .option b { color: var(--primary); }
+    .option p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font: 13px/1.5 system-ui, sans-serif;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 680px) {
+      .terminal { padding: 22px 18px; font-size: 13px; }
+      .options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Coffee · 返璞归真</h1>
+    <p class="lead">极简启动页、统一青绿色主题、单行咖啡豆状态。下方状态文案会自动轮换。</p>
+
+    <section class="terminal">
+      <div class="brand">Coffee</div>
+      <div class="muted">DeepSeek V4 Flash · ziling-erp-admin</div>
+      <div class="muted">/ 查看命令 · Ctrl+C 退出</div>
+
+      <div class="input">
+        <span class="rule">────────────────────────────────────────────────────────────</span>
+        <span class="input-line">帮我检查当前项目的类型错误</span>
+        <span class="rule">────────────────────────────────────────────────────────────</span>
+      </div>
+
+      <div class="status">
+        <span class="bean">◒</span>
+        <span id="statusText">正在连接 DeepSeek V4 Flash…</span>
+      </div>
+
+      <div class="timeline">
+        <div><span class="success">✓</span> <strong>网络信息已经带回</strong> · 0.8s</div>
+        <div><span class="success">✓</span> <strong>命令执行已经完成</strong> · 1.2s</div>
+        <div><span class="error">✗</span> <strong>工具执行暂时失败</strong> · 0.3s</div>
+      </div>
+    </section>
+
+    <div class="options">
+      <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+        <b>使用这个样式</b>
+        <p>确认精简主题与当前信息密度。</p>
+      </div>
+      <div class="option" data-choice="revise" onclick="toggleSelect(this)">
+        <b>还需要调整</b>
+        <p>回到终端告诉我需要修改的位置。</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const statuses = [
+      "正在连接 DeepSeek V4 Flash…",
+      "正在分析问题…",
+      "正在读取项目上下文…",
+      "正在准备调用工具…",
+      "正在整理工具结果…"
+    ];
+    let statusIndex = 0;
+    setInterval(() => {
+      statusIndex = (statusIndex + 1) % statuses.length;
+      document.getElementById("statusText").textContent = statuses[statusIndex];
+    }, 1800);
+  </script>
+</body>
+</html>

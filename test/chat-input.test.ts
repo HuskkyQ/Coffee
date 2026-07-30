@@ -142,6 +142,33 @@ test("uses semantic theme colors for selection and previews", () => {
   assert.match(stripAnsi(output), /暮色露营\s+● ● ●\s+当前/u);
 });
 
+test("keeps borders plain and fills the input row for every theme", () => {
+  const expectedStyles = [
+    ["latte", "38;2;211;166;111;48;2;75;62;50"],
+    ["coast", "38;2;128;193;183;48;2;54;77;79"],
+    ["camp", "38;2;201;145;167;48;2;77;61;69"],
+  ] as const;
+
+  for (const [themeId, ansiCodes] of expectedStyles) {
+    const [main, bottom] = renderChatPrompt({
+      message: "",
+      line: "hello",
+      dropdown: "",
+      styles: createStyleContext(themeId, "truecolor"),
+      columns: 40,
+    });
+    const [top, inputLine] = main.split("\n");
+
+    assert.equal(top, "─".repeat(40));
+    assert.equal(bottom, "─".repeat(40));
+    assert.equal(
+      inputLine,
+      `\u001b[${ansiCodes}mhello\u001b[K\u001b[0m`,
+    );
+    assert.doesNotMatch(`${top}${bottom}`, /\u001b/u);
+  }
+});
+
 test("keeps an empty chat prompt on one visual input row", () => {
   const [main] = renderChatPrompt({
     message: "",
@@ -154,6 +181,7 @@ test("keeps an empty chat prompt on one visual input row", () => {
   const promptLine = main.split("\n").at(-1) ?? "";
   assert.equal(stringWidth(promptLine), 0);
   assert.ok(promptLine.length > 0);
+  assert.match(promptLine, /\u200b\u001b\[K\u001b\[0m$/u);
 });
 
 test("renders an unlabeled Pi-style frame for the main chat input", () => {

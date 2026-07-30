@@ -321,16 +321,14 @@ export function renderChatPrompt(config: {
       ? Math.max(1, Math.floor(config.columns))
       : 80;
   const border = "─".repeat(width);
-  const styledBorder = paintTheme(border, "border", config.styles, {
-    backgroundRole: "inputBackground",
-  });
   const inputLine = config.line === "" ? EMPTY_INPUT_ANCHOR : config.line;
   const styledInputLine = paintTheme(inputLine, "primary", config.styles, {
     backgroundRole: "inputBackground",
+    fillToEnd: true,
   });
   return [
-    `${styledBorder}\n${styledInputLine}`,
-    [styledBorder, dropdown].filter(Boolean).join("\n"),
+    `${border}\n${styledInputLine}`,
+    [border, dropdown].filter(Boolean).join("\n"),
   ];
 }
 

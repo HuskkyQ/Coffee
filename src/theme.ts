@@ -39,9 +39,11 @@ interface PaintOptions {
   bold?: boolean;
   underline?: boolean;
   backgroundRole?: ThemeRole;
+  fillToEnd?: boolean;
 }
 
 const ESCAPE = "\u001b[";
+const ERASE_TO_END = `${ESCAPE}K`;
 const RESET = "\u001b[0m";
 const TRUE_COLOR_TERMINALS = new Set([
   "apple_terminal",
@@ -202,5 +204,7 @@ export function paintTheme(
     );
   }
 
-  return `${ESCAPE}${codes.join(";")}m${text}${RESET}`;
+  return `${ESCAPE}${codes.join(";")}m${text}${
+    options.fillToEnd ? ERASE_TO_END : ""
+  }${RESET}`;
 }
